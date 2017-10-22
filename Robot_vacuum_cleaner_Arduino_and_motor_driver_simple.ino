@@ -1,11 +1,5 @@
-/*
- Program for controlling a robot with two motors.
- The robot turns when motors changes their speed and direction.
- Front bumpers on left and right sides detect obstacles.
- Motor-driver is used to run motors.
- Motors are run on full speed.
- */
-//right side
+//Это код для тех,у кого драйвер двигателей L298P.Можете менять пины,как хотите.
+
 const int pinRightMotorDirection = 4;//"Channel A" on motor-driver
 const int pinRightMotorSpeed = 3;//"Channel A" on motor-driver
 const int pinRightBumper = 5;
