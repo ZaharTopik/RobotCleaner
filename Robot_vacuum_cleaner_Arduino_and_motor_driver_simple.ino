@@ -1,11 +1,19 @@
-//Это код для тех,у кого драйвер двигателей L298P.Можете менять пины,как хотите.
-
-const int pinRightMotorDirection = 4;//"Channel A" on motor-driver
-const int pinRightMotorSpeed = 3;//"Channel A" on motor-driver
+/*
+ Program for controlling a robot with two motors.
+ The robot turns when motors changes their speed and direction.
+ Front bumpers on left and right sides detect obstacles.
+ Motor-driver is used to run motors.
+ Motors are run on full speed.
+ */
+//right side
+const int pinRightMotorDirectionIn3 = 10;
+const int pinRightMotorDirectionIn4 = 11;
+const int pinRightMotorSpeed = 12;
 const int pinRightBumper = 5;
 //left side
-const int pinLeftMotorDirection = 7;//"Channel B" on motor-driver
-const int pinLeftMotorSpeed = 6;//"Channel B" on motor-driver
+const int pinLeftMotorDirectionIn1 = 2;
+const int pinLeftMotorDirectionIn2 = 3;
+const int pinLeftMotorSpeed = 4;//"Channel B" on motor-driver
 const int pinLeftBumper = 8;
 //timeouts - they are different to avoid robot stuck in a corner
 const int turnRightTimeout = 150;
@@ -30,10 +38,12 @@ void loop() {
 }
 //---------------------------------------------------
 void initPins(){
-  pinMode(pinRightMotorDirection, OUTPUT);
+  pinMode(pinRightMotorDirectionIn3, OUTPUT);
+  pinMode(pinRightMotorDirectionIn4, OUTPUT);
   pinMode(pinRightMotorSpeed, OUTPUT);
   pinMode(pinRightBumper, INPUT_PULLUP);
-  pinMode(pinLeftMotorDirection, OUTPUT);
+  pinMode(pinLeftMotorDirectionIn1, OUTPUT);
+  pinMode(pinRightMotorDirectionIn2, OUTPUT);
   pinMode(pinLeftMotorSpeed, OUTPUT);
   pinMode(pinLeftBumper, INPUT_PULLUP);
 }
@@ -79,23 +89,25 @@ bool checkBumperIsNotPressed(int pinBumper){
   return digitalRead(pinBumper) == HIGH;
 }
 void runRightMotorForward(){
-  runMotorForward(pinRightMotorDirection, pinRightMotorSpeed);
+  runMotorForward(pinRightMotorDirectionIn3,pinRightMotorDirectionIn4,pinRightMotorSpeed);
 }
 void runLeftMotorForward(){
-  runMotorForward(pinLeftMotorDirection, pinLeftMotorSpeed);
+  runMotorForward(pinLeftMotorDirectionIn1,pinRightMotorDirectionIn2,pinLeftMotorSpeed);
 }
 void runRightMotorBackward(){
-  runMotorBackward(pinRightMotorDirection, pinRightMotorSpeed);
+  runMotorBackward(pinRightMotorDirectionIn3,pinRightMotorDirectionIn4,pinRightMotorSpeed);
 }
 void runLeftMotorBackward(){
-  runMotorBackward(pinLeftMotorDirection, pinLeftMotorSpeed);
+  runMotorBackward(pinLeftMotorDirectionIn1,pinRightMotorDirectionIn2,pinLeftMotorSpeed);
 }
-void runMotorForward(int pinMotorDirection, int pinMotorSpeed){
-  digitalWrite(pinMotorDirection, true); //set direction forward
+void runMotorForward(int pinMotorDirection1,int pinMotorDirection2,int pinMotorSpeed){
+  digitalWrite(pinMotorDirection1, true); //set direction forward
+  digitalWrite(pinMotorDirection2, true);
   digitalWrite(pinMotorSpeed, false); //set max speed forward
 }
-void runMotorBackward(int pinMotorDirection, int pinMotorSpeed){
-  digitalWrite(pinMotorDirection, false); //set direction backward
+void runMotorBackward(int pinMotorDirection1,int pinMotorDirection2,int pinMotorSpeed){
+  digitalWrite(pinMotorDirection1, false); //set direction backward
+  digitalWrite(pinMotorDirection2, false);
   digitalWrite(pinMotorSpeed, true); //set max speed backward
 }
 
